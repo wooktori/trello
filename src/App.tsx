@@ -1,32 +1,23 @@
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { useSetRecoilState } from "recoil";
+import { todoListAtom } from "./atom";
+import Board from "./components/Board";
 
 function App() {
-  const handleDragEnd = () => {};
+  const setTodoList = useSetRecoilState(todoListAtom);
+  const handleDragEnd = ({ source, destination, draggableId }: DropResult) => {
+    if (!destination) return;
+    setTodoList((prev) => {
+      const newTodo = [...prev];
+      newTodo.splice(source.index, 1);
+      newTodo.splice(destination?.index, 0, draggableId);
+      return newTodo;
+    });
+  };
   return (
-    <div>
+    <div className="h-screen flex flex-col items-center justify-center">
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="1">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="bg-blue-400 min-h-[50vh]"
-            >
-              <Draggable draggableId="2" index={0}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.dragHandleProps}
-                    {...provided.draggableProps}
-                  >
-                    드래그해봐
-                  </div>
-                )}
-              </Draggable>
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+        <Board />
       </DragDropContext>
     </div>
   );
