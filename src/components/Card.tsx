@@ -1,12 +1,12 @@
 import { Draggable } from "@hello-pangea/dnd";
+import React from "react";
 
 interface IProps {
   todo: string;
   index: number;
 }
 
-export default function Card({ todo, index }: IProps) {
-  console.log(todo);
+function Card({ todo, index }: IProps) {
   return (
     <Draggable draggableId={todo} index={index} key={todo}>
       {(provided) => (
@@ -22,3 +22,5 @@ export default function Card({ todo, index }: IProps) {
     </Draggable>
   );
 }
+
+export default React.memo(Card);
