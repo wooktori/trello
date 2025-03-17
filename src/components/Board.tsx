@@ -11,7 +11,7 @@ export default function Board() {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="flex flex-col items-center justify-center h-96 w-96 bg-slate-500"
+          className="flex flex-col items-center justify-center h-72 w-[300px] min-w-[30px] bg-gray-300"
         >
           {todoList.map((todo, index) => (
             <Card todo={todo} index={index} key={todo} />

@@ -15,8 +15,10 @@ function App() {
     });
   };
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
+    <div className="grid grid-cols-3 place-items-center items-center w-full h-screen bg-blue-400">
       <DragDropContext onDragEnd={handleDragEnd}>
+        <Board />
+        <Board />
         <Board />
       </DragDropContext>
     </div>
