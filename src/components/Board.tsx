@@ -35,7 +35,12 @@ export default function Board({ todoList, boardId }: IProps) {
           >
             <div className="flex flex-col flex-grow w-full items-center">
               {todoList.map((todo, index) => (
-                <Card todo={todo.text} index={index} key={todo.text} />
+                <Card
+                  todo={todo.text}
+                  index={index}
+                  key={todo.text}
+                  boardId={boardId}
+                />
               ))}
               {provided.placeholder}
             </div>
