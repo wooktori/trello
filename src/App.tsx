@@ -1,25 +1,46 @@
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { todoListAtom } from "./atom";
 import Board from "./components/Board";
 
 function App() {
-  const setTodoList = useSetRecoilState(todoListAtom);
-  const handleDragEnd = ({ source, destination, draggableId }: DropResult) => {
+  const [todoList, setTodoList] = useRecoilState(todoListAtom);
+  const handleDragEnd = ({ source, destination }: DropResult) => {
     if (!destination) return;
-    setTodoList((prev) => {
-      const newTodo = [...prev];
-      newTodo.splice(source.index, 1);
-      newTodo.splice(destination?.index, 0, draggableId);
-      return newTodo;
-    });
+    if (destination?.droppableId === source.droppableId) {
+      setTodoList((prev) => {
+        const boardCopy = [...prev[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...prev,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+
+    if (destination.droppableId !== source.droppableId) {
+      setTodoList((prev) => {
+        const sourceBoard = [...prev[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        const destinationBoard = [...prev[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...prev,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      });
+    }
   };
   return (
     <div className="grid grid-cols-3 place-items-center items-center w-full h-screen bg-blue-400">
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Board />
-        <Board />
-        <Board />
+        {Object.keys(todoList).map((title) => (
+          <Board key={title} todoList={todoList[title]} boardId={title} />
+        ))}
       </DragDropContext>
     </div>
   );
