@@ -45,7 +45,7 @@ function App() {
     <div className="grid grid-cols-3 place-items-center items-center w-full h-screen bg-blue-400">
       <DragDropContext onDragEnd={handleDragEnd}>
         {Object.keys(todoList).map((title) => (
-          <Board key={title} todoList={todoList[title]} boardId={title} />
+          <Board key={title} boardTodo={todoList[title]} boardId={title} />
         ))}
       </DragDropContext>
     </div>

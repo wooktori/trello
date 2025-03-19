@@ -2,11 +2,11 @@ import { Droppable } from "@hello-pangea/dnd";
 import { ITodo, todoListAtom } from "../atom";
 import Card from "./Card";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 
 interface IProps {
-  todoList: ITodo[];
+  boardTodo: ITodo[];
   boardId: string;
 }
 
@@ -14,8 +14,8 @@ interface IForm {
   todo: string;
 }
 
-export default function Board({ todoList, boardId }: IProps) {
-  const setTodoList = useSetRecoilState(todoListAtom);
+export default function Board({ boardTodo, boardId }: IProps) {
+  const [todoList, setTodoList] = useRecoilState(todoListAtom);
   const { handleSubmit, register, setValue } = useForm<IForm>();
   const onValid = ({ todo }: IForm) => {
     const newTodo = { id: Date.now(), text: todo };
@@ -38,7 +38,7 @@ export default function Board({ todoList, boardId }: IProps) {
             className="flex flex-col items-center justify-center h-[400px] w-[250px] min-w-[30px] bg-gray-300 p-3 rounded-2xl"
           >
             <div className="flex flex-col flex-grow w-full items-center">
-              {todoList.map((todo, index) => (
+              {boardTodo.map((todo, index) => (
                 <Card
                   todo={todo.text}
                   index={index}
