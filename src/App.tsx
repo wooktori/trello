@@ -2,6 +2,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useRecoilState } from "recoil";
 import { todoListAtom } from "./atom";
 import Board from "./components/Board";
+import { useEffect } from "react";
 
 function App() {
   const [todoList, setTodoList] = useRecoilState(todoListAtom);
@@ -35,6 +36,11 @@ function App() {
       });
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todoList));
+  }, [todoList]);
+
   return (
     <div className="grid grid-cols-3 place-items-center items-center w-full h-screen bg-blue-400">
       <DragDropContext onDragEnd={handleDragEnd}>

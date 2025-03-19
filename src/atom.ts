@@ -5,24 +5,19 @@ export interface ITodo {
   text: string;
 }
 
-interface ITodoList {
+export interface ITodoList {
   [key: string]: ITodo[];
 }
 
+const storedData = localStorage.getItem("todos");
+
 export const todoListAtom = atom<ITodoList>({
   key: "todoList",
-  default: {
-    Todo: [
-      { id: 1, text: "hi" },
-      { id: 2, text: "haa" },
-    ],
-    Doing: [
-      { id: 3, text: "hdf" },
-      { id: 4, text: "hsdf" },
-    ],
-    Done: [
-      { id: 5, text: "sdfi" },
-      { id: 6, text: "gsdi" },
-    ],
-  },
+  default: storedData
+    ? JSON.parse(storedData)
+    : {
+        Todo: [],
+        Doing: [],
+        Done: [],
+      },
 });

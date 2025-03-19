@@ -3,6 +3,7 @@ import { ITodo, todoListAtom } from "../atom";
 import Card from "./Card";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
+import { useEffect } from "react";
 
 interface IProps {
   todoList: ITodo[];
@@ -14,15 +15,18 @@ interface IForm {
 }
 
 export default function Board({ todoList, boardId }: IProps) {
-  const setTodos = useSetRecoilState(todoListAtom);
+  const setTodoList = useSetRecoilState(todoListAtom);
   const { handleSubmit, register, setValue } = useForm<IForm>();
   const onValid = ({ todo }: IForm) => {
     const newTodo = { id: Date.now(), text: todo };
-    setTodos((prev) => {
+    setTodoList((prev) => {
       return { ...prev, [boardId]: [newTodo, ...prev[boardId]] };
     });
     setValue("todo", "");
   };
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todoList));
+  }, [todoList]);
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="font-extrabold text-2xl">{boardId}</div>
